@@ -258,7 +258,7 @@ HTTP/1.1 200 OK
 일정 관리 앱에서 삭제한 일정의 데이터를 JSON 형식으로 반환합니다.
 |기능|Method|URL|Request|Response|상태코드|
 |---|---|---|---|---|---|
-|일정 삭제|DELETE|/api/schedules/{scheduleId}|요청 param||200: 정상 삭제, 400 잘못된 문법, 404 찾을 수 없음|
+|일정 삭제|DELETE|/api/schedules/{scheduleId}|||200: 정상 삭제, 400 잘못된 문법, 404 찾을 수 없음|
 
 - 요청
   
@@ -272,14 +272,6 @@ HTTP/1.1 200 OK
 DELETE /api/schedules/{scheduleId}
 
 Content-Type: application/json
-
-- 요청 예시
-```json
-
-{
-  "scheduleId": "1"
-}
-```
 
 - 응답
 
