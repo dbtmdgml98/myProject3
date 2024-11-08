@@ -4,11 +4,11 @@
 
 |기능|Method|URL|Request|Response|상태코드|
 |:---:|:---:|:---:|:-----:|:-----:|:-----:|
-|일정 등록|POST|/api/schedules|요청 body|등록 정보|200: 정상 등록, 400 잘못된 문법|
-|특정 일정 조회|GET|/api/schedules/{scheduleId}||단건 응답 정보|200: 정상 조회, 400 잘못된 문법, 404 찾을 수 없음|
-|전체 일정 조회|GET|/api/schedules|요청 param|다건 응답 정보|200: 정상 조회, 400 잘못된 문법|
-|일정 수정|PUT|/api/schedules/{scheduleId}|요청 body|수정 정보|200: 정상 수정, 400 잘못된 문법, 404 찾을 수 없음|
-|일정 삭제|DELETE|/api/schedules/{scheduleId}|요청 param||200: 정상 삭제, 400 잘못된 문법, 404 찾을 수 없음|
+|일정 등록|POST|/api/schedules|요청 body|등록 정보|201 Created, 400 잘못된 문법|
+|특정 일정 조회|GET|/api/schedules/{scheduleId}||단건 응답 정보|200 OK, 404 NOT FOUND|
+|전체 일정 조회|GET|/api/schedules|요청 param|다건 응답 정보|200 OK, 400 잘못된 문법|
+|일정 수정|PATCH|/api/schedules/{scheduleId}|요청 body|수정 정보|200 OK, 404 NOT FOUND|
+|일정 삭제|DELETE|/api/schedules/{scheduleId}|요청 body||200 OK, 404 NOT FOUND|
 
 <details>
     <summary>일정 등록</summary> 
@@ -79,8 +79,7 @@ HTTP/1.1 200 OK
 |특정 일정 조회|GET|/api/schedules/{scheduleId}||단건 응답 정보|200: 정상 조회, 400 잘못된 문법, 404 찾을 수 없음|
 
 - 요청
-  
-파라미터를 JSON 형식으로 전달합니다.
+
 |파라미터|타입|필수여부|설명|
 |:---:|:---:|:---:|:-----:|
 |scheduleId|String|Y|일정 Id|
@@ -193,14 +192,13 @@ HTTP/1.1 200 OK
 일정 관리 앱에서 수정한 일정의 데이터를 JSON 형식으로 반환합니다.
 |기능|Method|URL|Request|Response|상태코드|
 |---|---|---|---|---|---|
-|일정 수정|PUT|/api/schedules/{scheduleId}|요청 body|수정 정보|200: 정상 수정, 400 잘못된 문법, 404 찾을 수 없음|
+|일정 수정|PATCH|/api/schedules/{scheduleId}|요청 body|수정 정보|200: 정상 수정, 400 잘못된 문법, 404 찾을 수 없음|
    
 - 요청
-  
-파라미터를 JSON 형식으로 전달합니다.
+
 |파라미터|타입|필수여부|설명|
 |:---:|:---:|:---:|:-----:|
-|scheduleId|String|Y|일정 Id|
+
 |startDate|String|N|일정 수정 기간 시작 날짜(yyyy-mm-dd 형식)|
 |endDate|String|N|일정 수정 기간 종료 날짜(yyyy-mm-dd 형식)|
 |title|String|N|일정 제목 (30자를 넘을 수 없습니다.)|
@@ -208,7 +206,7 @@ HTTP/1.1 200 OK
 
 - 참고사항
   
-PUT /api/schedules/{scheduleId}
+PATCH /api/schedules/{scheduleId}
 
 Content-Type: application/json
 
@@ -216,7 +214,6 @@ Content-Type: application/json
 ```json
 
 {
-  "scheduleId": "1",
   "endDate": "2024-11-03"
 }
 ```
@@ -273,6 +270,14 @@ DELETE /api/schedules/{scheduleId}
 
 Content-Type: application/json
 
+- 요청 예시
+```json
+
+{
+  "password": "1234"
+}
+```
+
 - 응답
 
 응답에 성공하면 결괏값을 JSON 형식으로 반환합니다.
@@ -310,11 +315,13 @@ HTTP/1.1 200 OK
 -- 테이블 생성 (schedule)
 CREATE TABLE schedule
 (
-    schedule_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '일정 Id',
-    start_date DATE COMMENT '일정 기간 시작 날짜(yyyy-mm-dd 형식)',
-    end_date DATE COMMENT '일정 기간 종료 날짜(yyyy-mm-dd 형식)',
-    title VARCHAR(30) COMMENT '일정 제목',
-    content VARCHAR(100) COMMENT '일정 내용'
+    id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '일정 식별자',
+    things_to_do VARCHAR(100) NOT NULL COMMENT '할일',
+    name VARCHAR(20) NOT NULL COMMENT '작성자명',
+    password VARCHAR(50) NOT NULL COMMENT '비밀번호',
+    create_date VARCHAR(50) NOT NULL COMMENT '작성일 (형식 : YYYY-MM-DD)',
+    update_date VARCHAR(50) COMMENT '수정일 (형식 : YYYY-MM-DD)'
+
 );
 
 ```
